@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve pages FIRST before static
+// Routes to serve HTML
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
@@ -19,12 +19,11 @@ app.get("/call", (req, res) => {
   res.sendFile(__dirname + "/public/call.html");
 });
 
-// Static files AFTER routes
+// Static assets
 app.use(express.static("public"));
 
-// ✅ SINGLE socket connection handler
+// SOCKET.IO logic
 io.on("connection", (socket) => {
-  // --- CHAT System ---
   socket.on("joinRoom", ({ username, room }) => {
     socket.join(room);
     socket.to(room).emit("chat message", `${username} joined the room`);
@@ -38,7 +37,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  // --- VIDEO CALL System ---
   socket.on("join-call-room", ({ username, room }) => {
     socket.join(room);
     const clients = Array.from(io.sockets.adapter.rooms.get(room) || []);
@@ -60,8 +58,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Server start
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, () => {
   console.log(`✅ Bliply running on all interfaces at http://0.0.0.0:${PORT}`);
 });

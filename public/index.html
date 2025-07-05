@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BLIPLY - Join</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>🚀 Welcome to BLIPLY</h2>
+    <form id="joinForm">
+      <input type="text" id="username" placeholder="Enter your name" required /><br>
+      <input type="text" id="room" placeholder="Enter room name" required /><br>
+      <button type="submit" id="joinChat">Join Chat</button>
+      <button type="button" id="joinCall">Join Video Call</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("joinForm");
+
+    document.getElementById("joinChat").addEventListener("click", function(e) {
+      form.action = "/chat";
+    });
+
+    document.getElementById("joinCall").addEventListener("click", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const room = document.getElementById("room").value;
+      if (username && room) {
+        window.location.href = `/call?username=${username}&room=${room}`;
+      }
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const room = document.getElementById("room").value;
+      if (username && room) {
+        window.location.href = `/chat?username=${username}&room=${room}`;
+      }
+    });
+  </script>
+</body>
+</html>
